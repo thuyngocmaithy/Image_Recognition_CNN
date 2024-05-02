@@ -1,51 +1,30 @@
 
-:root {
-    --color1: #482797; /* Màu gốc */
-    --color2: #12428a; /* Màu sau khi sử dụng darken() */
+body {
+  background-color: #000000d8 !important;
 }
-
-.body {
-    background: linear-gradient(45deg, var(--color1) 0%, var(--color2) 100%);
-    background-size: 200% 200%;  
-    height: 100vh;
-    width: 100vw;
-    animation: backgroundAnimate 6s ease infinite;
-  }
-  
-  @keyframes backgroundAnimate { 
-    0% {
-      background-position: 0% 50%;
-    }
-    
-    50% {
-      background-position: 100% 50%;
-    }
-    
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
 .container-choose-image{
     display: block;
     margin: 0 auto;
     text-align: center;    
     width: 600px; 
-    height: 400px;
+    height: 80%;
     /* border: 3px solid royalblue; */
     border-radius: 10px;
 }
 /* background */
 .container-content {
-    position: absolute;
-  top:0%;
-  left: 0%;
-  width:100%;
-  margin: 0;
-  padding: 0;
-    
+  background-size: 100% 100%;
+  background-image: radial-gradient(46% 47% at 90% 21%, #FFB06DB5 15%, #073AFF00 100%);
+  background-color: #EDEDED;
+  box-shadow: rgb(207, 207, 207) 0px 2px 8px;
+  border-radius: 5px;
+  margin: 20px 120px 50px 120px;
+  padding: 3px 20px 25px 20px;
 }
-
+.list-result-button{
+    display: flow-root;    
+    text-align: center;
+}
 	
 
 
