@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <h2 class="text-center mt-4 text-light ">Thêm dữ liệu</h2>
+    <div class="container-content">
+        <div class="d-flex my-4">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="container-choose-image">
+                    <div style="margin: 0 auto; height: 300px;"
+                        class="d-flex w-100 align-items-center justify-content-center mb-1">
+                        <img class="object-fit-cover px-3 rounded-5 " src="../static/none-image-1.png" id="output"
+                            style="max-width: 100%; max-height: 100%;" />
+                    </div>
+                    <!-- <input class="mt-1" type="file" onchange="loadFile(event)" /> -->
+                    <div class="input-group px-5 ">
+                        <div class="custom-file">
+                            <input type="file" name="file" class="custom-file-input" id="inputFile"
+                                onchange="loadFile(event)">
+                            <label class="custom-file-label" for="inputFile">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="label">Chọn nhãn:</label>
+                    <select class="form-control" id="label" name="label">
+                        <option value="airplane">Máy bay</option>
+                        <option value="automobile">Ô tô</option>
+                        <option value="bird">Chim</option>
+                        <option value="cat">Mèo</option>
+                        <option value="deer">Nai</option>
+                        <option value="dog">Chó</option>
+                        <option value="frog">Ếch</option>
+                        <option value="horse">Ngựa</option>
+                        <option value="ship">Tàu thủy</option>
+                        <option value="truck">Xe tải</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Tải lên</button>
+                </div>
+
+                <div style="display: none;" class="alert-upload alert alert-primary" role="alert">
+                    Tải lên thành công
+                </div>
+                <div>
+                    <button id="regBtn" class="btn btn-secondary mb-3"><a href="./"
+                            style="color: white; text-decoration: none;">Nhận diện</a></button>
+                    <button id="trainBtn" class="btn btn-success mb-3">Huấn luyện</button>
+                </div>
+                <div style="display: none;" class="alert-train alert alert-warning alert-dismissible fade show"
+                    role="alert">
+                    Dữ liệu đang được huấn luyện
+                    <button id="btnCloseAlertTrain" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+    <script>
+        var base64Data;
+        var loadFile = function (event) {
+            var image = document.getElementById('output');
+            var imageUrl = URL.createObjectURL(event.target.files[0]);
+            $('.custom-file-label').text(event.target.files[0].name)
+            image.src = imageUrl;
+
+            // Chuyển đổi hình ảnh thành base64
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            var img = new Image();
+
+            img.onload = function () {
+                canvas.width = this.width;
+                canvas.height = this.height;
+                ctx.drawImage(this, 0, 0);
+                base64Data = canvas.toDataURL('image/jpeg');
+            };
+
+
+
+            img.src = imageUrl;
+
+
+        };
+        $('#uploadForm').submit(function (event) {
+            event.preventDefault(); // Ngăn chặn gửi biểu mẫu một cách thông thường
+
+            var label = document.getElementById('label').value;
+            var fileInput = document.getElementById('inputFile');
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append('file', file);
+            formData.append('label', label);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData // Gửi dữ liệu FormData trực tiếp
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Trả về dữ liệu JSON từ phản hồi
+                })
+                .then(data => {
+                    // Xử lý kết quả từ máy chủ nếu cần
+                    console.log(data.result);
+                    if (data.result == 'success') {
+                        $('.alert-upload').css('display', 'block');
+
+                        setTimeout(function () {
+                            $('.alert-upload').css('display', 'none');
+                        }, 3000);
+                    }
+                })
+                .catch(error => {
+                    // Xử lý lỗi nếu có
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
+        $('#trainBtn').on('click', function (event) {
+            event.preventDefault();
+            $('.alert-train').css('display', 'block');
+            $('#btnCloseAlertTrain').css('display', 'none');
+            fetch('/train', {
+                method: 'POST',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    return response.json(); // Trả về dữ liệu JSON từ phản hồi
+                })
+                .then(data => {
+                    // Xử lý kết quả từ máy chủ nếu cần
+                    console.log(data.result);
+                    if (data.status == 'success') {
+                        $('.alert-train').text('Đã huấn luyện thành công')
+                        $('#btnCloseAlertTrain').css('display', 'block');
+                        $('#btnCloseAlertTrain').on('click', function (event) {
+                            $('.alert-train').css('display', 'none');
+                            $('.alert-train').text('Dữ liệu đang được huấn luyện')
+                        })
+
+                    }
+                })
+                .catch(error => {
+                    // Xử lý lỗi nếu có
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
+
+
+    </script>
+</body>
+
+</html>

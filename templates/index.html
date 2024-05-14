@@ -17,7 +17,7 @@
 <body>
     <h2 class="text-center mt-4 text-light ">Nhận dạng hình ảnh</h2>
     <div class="container-content">
-        <div class="d-flex my-4">
+        <div class="d-flex my-2">
 
 
             <div class="container-choose-image">
@@ -37,6 +37,9 @@
         </div>
         <div class="list-result-button">
 
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <a href="./add-data" style="text-decoration: underline;">Giúp chúng tôi trở nên tốt hơn</a>
         </div>
     </div>
 
@@ -82,13 +85,14 @@
                 var button = $("<button type='button' id='" + value[0] + "' class='item-result btn btn-lg btn-secondary mx-2 my-1'></button>").text(value[1]);
                 $('.list-result-button').append(button);
             })
+
         })
 
         var result = '';
 
+
         function predict_image_class(imageUrl) {
-            // Gửi yêu cầu AJAX hoặc fetch để gọi hàm predict_image_class trên máy chủ
-            // Ví dụ sử dụng fetch:            
+            // Gửi yêu cầu AJAX hoặc fetch để gọi hàm predict_image_class trên máy chủ           
             fetch('/predict_image_class', {
                 method: 'POST',
                 headers: {
@@ -98,7 +102,6 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    result = data.prediction;
                     $(".item-result").each(function (index) {
                         $(this).addClass("btn-secondary");
                         $(this).removeClass("btn-primary");
@@ -114,6 +117,8 @@
                     console.error('Error:', error);
                 });
         }
+
+
 
     </script>
 

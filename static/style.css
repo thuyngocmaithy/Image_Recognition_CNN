@@ -7,8 +7,9 @@ body {
     margin: 0 auto;
     text-align: center;    
     width: 600px; 
-    height: 80%;
+    /* height: 330px; */
     /* border: 3px solid royalblue; */
+    margin-bottom: 15px;
     border-radius: 10px;
 }
 /* background */
@@ -28,3 +29,22 @@ body {
 	
 
 
+#uploadForm{
+  margin: 0 auto;
+  text-align: center;
+  justify-content: center;
+}
+
+.form-group{
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.form-group label{
+  margin-bottom: 0 !important;  
+}
+.form-control{
+  max-width: 285px;
+  margin: 0 10px;
+}

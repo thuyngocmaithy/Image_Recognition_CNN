@@ -25,7 +25,7 @@ results = {
 
 def predict_image_class(image_path):
     # Load and preprocess the image
-    # Giải mã dữ liệu base64 và chuyển đổi thành hình ảnh
+    # Giải mã dữ liệu base64 và chuyển đổi thành hình ảnh    
     im = Image.open(io.BytesIO(base64.b64decode(image_path.split(',')[1])))
     im = im.resize((32, 32))
     im = np.expand_dims(im, axis=0)
